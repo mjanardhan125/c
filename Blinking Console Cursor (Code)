@@ -1,0 +1,17 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    printf("Blinking Cursor Example:\n");
+    
+    while (1) {
+        printf(">> \r"); // Print and return carriage
+        fflush(stdout); // Ensure immediate display
+        USLEEP(500);    // Wait 500ms
+
+        printf("  \r"); // Overwrite with spaces
+        fflush(stdout);
+        USLEEP(500);    // Wait 500ms
+    }
+    return 0;
+}
