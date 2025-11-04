@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int serial_read_byte() {
+    static int counter = 0;
+    if (counter++ < 5) return 'A' + counter;
+    return -1; // -1 means no data available
+}
+
+void serial_write_byte(int byte) {
+    if (byte != -1) printf("[TX_SIM]: %c\n", (char)byte);
+}
+
+int main() {
+    printf("Simulating Serial Port Echo...\n");
+    int read_byte;
+
+    while (1) {
+        read_byte = serial_read_byte();
+
+        if (read_byte != -1) {
+            printf("[RX_SIM]: %c -> ", (char)read_byte);
+            serial_write_byte(read_byte); // Echo the byte immediately
+        }
+        
+        SLEEP(200); // Poll every 200ms
+        
+        if (read_byte == 'F') break; // Exit condition for simulation
+    }
+    return 0;
+}
