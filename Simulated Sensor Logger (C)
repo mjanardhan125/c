@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main() {
+    const char *logfile = "sensor_data.log";
+    time_t timer;
+    struct tm* tm_info;
+    char timestamp[20];
+    FILE *fp;
+
+    srand(time(NULL));
+    printf("Logging simulated data to %s...\n", logfile);
+
+    while (1) {
+        time(&timer);
+        tm_info = localtime(&timer);
+        strftime(timestamp, 20, "%H:%M:%S", tm_info);
+        
+        // Simulate temperature between 20.0 and 30.0
+        double temp = 20.0 + (rand() % 1000) / 100.0; 
+
+        // Append to file
+        fp = fopen(logfile, "a");
+        if (fp != NULL) {
+            fprintf(fp, "%s | Temperature: %.2f C\n", timestamp, temp);
+            fclose(fp);
+            printf("Logged: %s, %.2f C\n", timestamp, temp);
+        } else {
+            fprintf(stderr, "Error opening log file!\n");
+        }
+
+        SLEEP(2); // Log every 2 seconds
+    }
+    return 0;
+}
