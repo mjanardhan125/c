@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    char input_char;
+    printf("Start typing. Input is echoed immediately. Press '#' to exit.\n");
+    
+    // Set stdin to non-buffered mode (platform-specific code is better for this, 
+    // but this loop handles buffered input character by character.)
+    
+    while (1) {
+        // Read the next character from standard input buffer
+        input_char = getchar(); 
+
+        if (input_char == EOF) continue;
+
+        if (input_char == '#') {
+            printf("\nExit character detected. Goodbye!\n");
+            break;
+        }
+
+        // Echo the character back immediately
+        printf(" -> %c\n", input_char);
+        fflush(stdout);
+    }
+    return 0;
+}
