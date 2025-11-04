@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define WIDTH 30
+#define HEIGHT 15
+
+int main() {
+    int x = WIDTH / 2;
+    int y = HEIGHT / 2;
+    srand(time(NULL));
+
+    while (1) {
+        system_clear();
+
+        // Draw the grid with the walker's position 'X'
+        for (int i = 0; i < HEIGHT; i++) {
+            for (int j = 0; j < WIDTH; j++) {
+                if (i == y && j == x) {
+                    printf("X");
+                } else if (i == 0 || i == HEIGHT - 1 || j == 0 || j == WIDTH - 1) {
+                    printf("#"); // Border
+                } else {
+                    printf(" ");
+                }
+            }
+            printf("\n");
+        }
+        
+        // Randomly change direction
+        int move = rand() % 4; // 0=Up, 1=Down, 2=Left, 3=Right
+        if (move == 0) y--;
+        else if (move == 1) y++;
+        else if (move == 2) x--;
+        else if (move == 3) x++;
+
+        // Keep walker within boundaries
+        if (x < 1) x = 1;
+        if (x >= WIDTH - 1) x = WIDTH - 2;
+        if (y < 1) y = 1;
+        if (y >= HEIGHT - 1) y = HEIGHT - 2;
+        
+        USLEEP(100); // Update every 100ms
+    }
+    return 0;
+}
