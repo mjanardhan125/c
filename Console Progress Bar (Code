@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+void draw_progress_bar(int current, int total) {
+    int bar_width = 50;
+    float progress = (float)current / total;
+    int pos = bar_width * progress;
+
+    printf("[");
+    for (int i = 0; i < bar_width; ++i) {
+        if (i < pos) printf("#");
+        else if (i == pos) printf(">");
+        else printf(" ");
+    }
+    printf("] %d%%\r", (int)(progress * 100));
+    fflush(stdout);
+}
+
+int main() {
+    int total_steps = 100;
+    
+    for (int i = 0; i <= total_steps; ++i) {
+        draw_progress_bar(i, total_steps);
+        USLEEP(50); // Update every 50ms
+    }
+    
+    printf("\nProgress complete!\n");
+    return 0;
+}
