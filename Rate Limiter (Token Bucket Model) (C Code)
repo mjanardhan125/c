@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main() {
+    int tokens = MAX_TOKENS;
+    time_t last_refill_time = time(NULL);
+    time_t current_time;
+
+    printf("Token Bucket Rate Limiter (Max %d tokens)...\n", MAX_TOKENS);
+
+    while (1) {
+        current_time = time(NULL);
+        if (current_time > last_refill_time) {
+            tokens = tokens + (current_time - last_refill_time);
+            if (tokens > MAX_TOKENS) tokens = MAX_TOKENS;
+            last_refill_time = current_time;
+        }
+
+        if (tokens > 0) {
+            tokens--;
+            printf("[ACCEPT] Event processed. Tokens left: %d\n", tokens);
+            // Simulate work
+            SLEEP(50);
+        } else {
+            printf("[REJECT] Rate limited. Waiting for tokens...\n");
+            SLEEP(500);
+        }
+    }
+    return 0;
+}
