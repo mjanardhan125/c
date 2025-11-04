@@ -1,0 +1,26 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void display_light(const char* color, int duration) {
+    for (int t = duration; t > 0; --t) {
+        #ifdef _WIN32
+        system("cls");
+        #else
+        system("clear");
+        #endif
+        
+        printf("Current Light: %s\n", color);
+        printf("Time Remaining: %d seconds\n", t);
+        
+        SLEEP(1);
+    }
+}
+
+int main() {
+    while (1) {
+        display_light("RED", 5);
+        display_light("GREEN", 7);
+        display_light("YELLOW", 2);
+    }
+    return 0;
+}
