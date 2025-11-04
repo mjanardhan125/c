@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+long get_file_size(const char *filename) {
+    FILE *fp = fopen(filename, "rb");
+    long size = -1;
+    if (fp) {
+        fseek(fp, 0, SEEK_END);
+        size = ftell(fp);
+        fclose(fp);
+    }
+    return size;
+}
+
+int main() {
+    const char *filename = "log.txt";
+    long initial_size;
+    FILE *fp;
+
+    // Ensure the file exists initially
+    fp = fopen(filename, "a");
+    if (fp) {
+        fclose(fp);
+        initial_size = get_file_size(filename);
+    } else {
+        printf("Error: Could not create/open file.\n");
+        return 1;
+    }
+    
+    printf("Monitoring file: %s. Initial size: %ld bytes.\n", filename, initial_size);
+
+    while (1) {
+        SLEEP(3); // Poll every 3 seconds
+        
+        long current_size = get_file_size(filename);
+
+        if (current_size != initial_size && current_size != -1) {
+            printf("\n[ALERT!] File changed! Old: %ld bytes, New: %ld bytes.\n", initial_size, current_size);
+            initial_size = current_size;
+        } else if (current_size == -1) {
+            printf("\n[ERROR!] File disappeared!\n");
+            break;
+        }
+    }
+    return 0;
+}
